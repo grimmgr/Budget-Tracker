@@ -56,7 +56,9 @@ self.addEventListener("fetch", evt => {
   }
 
   // handle data GET requests for data from /api routes
-  if (evt.request.url.includes("/api/transaction")) {
+  if (
+    evt.request.method === "GET" && 
+    evt.request.url.includes("/api/")) {
     // make network request and fallback to cache if network request fails (offline)
     evt.respondWith(
       caches.open(DATA_CACHE).then(cache => {
