@@ -1,18 +1,51 @@
+import { saveRecord, getIndxdbTransactions } from "./db";
+
 let transactions = [];
+
+// if ( !navigator.onLine ) {
+//   populateTransactions(transactions);
+// };
+
+// if ( !navigator.onLine ) {
+//   transactions = transactions.concat(pendingTransactions);
+//   console.log("offline");
+//   console.log(transactions);
+// };
+
+// console.log(`imported pending: ${pendingTransactions}`);
+
 let myChart;
 
-fetch("/api/transaction")
-  .then(response => {
-    return response.json();
-  })
-  .then(data => {
-    // save db data on global variable
-    transactions = data;
 
-    populateTotal();
-    populateTable();
-    populateChart();
-  });
+
+renderTransactions();
+
+function renderTransactions() {
+  fetch("/api/transaction")
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      // console.log("cached data:")
+      // console.log(data);
+      // save db data on global variable
+      if (navigator.onLine) {
+        transactions = data;
+        populateTotal();
+        populateTable();
+        populateChart();
+      } else {
+        getIndxdbTransactions().then(results => {
+          results.reverse();
+          transactions = [...results, ...data];
+          console.log(transactions);
+          populateTotal();
+          populateTable();
+          populateChart();
+        })
+      }
+    });
+};
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
@@ -103,14 +136,6 @@ function sendTransaction(isAdding) {
   if (!isAdding) {
     transaction.value *= -1;
   }
-
-  // add to beginning of current array of data
-  transactions.unshift(transaction);
-
-  // re-run logic to populate ui with new record
-  populateChart();
-  populateTable();
-  populateTotal();
   
   // also send to server
   fetch("/api/transaction", {
@@ -132,11 +157,20 @@ function sendTransaction(isAdding) {
       // clear form
       nameEl.value = "";
       amountEl.value = "";
+      renderTransactions();
     }
   })
   .catch(err => {
-    // fetch failed, so save in indexed db
+    // fetch failed, save to indexedDB
     saveRecord(transaction);
+    // // add to beginning of current array of data
+    // transactions.unshift(transaction);
+    // // re-run logic to populate ui with new record
+    // populateChart();
+    // populateTable();
+    // populateTotal();
+
+    renderTransactions();
 
     // clear form
     nameEl.value = "";

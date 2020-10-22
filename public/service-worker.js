@@ -13,6 +13,10 @@ const DATA_CACHE = "data-cache-v1";
 
 // install
 self.addEventListener("install", evt => {
+  // pre cache transaction data
+  evt.waitUntil(
+    caches.open(DATA_CACHE).then(cache => cache.add("/api/transaction"))
+  );
   // pre cache all static assets
   evt.waitUntil(
     caches.open(STATIC_CACHE)
@@ -64,7 +68,7 @@ self.addEventListener("fetch", evt => {
       caches.open(DATA_CACHE).then(cache => {
         return fetch(evt.request)
           .then(response => {
-            cache.put(evt.request, response.clone());
+            cache.add(evt.request, response.clone());
             return response;
           })
           .catch(() => caches.match(evt.request));
