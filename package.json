@@ -8,7 +8,7 @@
     "lite-server": "lite-server",
     "webpack": "webpack",
     "prestart": "npm run webpack",
-    "start": "npm start"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
