@@ -2,21 +2,7 @@ import { saveRecord, getIndxdbTransactions } from "./db";
 
 let transactions = [];
 
-// if ( !navigator.onLine ) {
-//   populateTransactions(transactions);
-// };
-
-// if ( !navigator.onLine ) {
-//   transactions = transactions.concat(pendingTransactions);
-//   console.log("offline");
-//   console.log(transactions);
-// };
-
-// console.log(`imported pending: ${pendingTransactions}`);
-
 let myChart;
-
-
 
 renderTransactions();
 
@@ -26,26 +12,26 @@ function renderTransactions() {
       return response.json();
     })
     .then(data => {
-      // console.log("cached data:")
-      // console.log(data);
-      // save db data on global variable
+      // if online, save db data on global variable
       if (navigator.onLine) {
         transactions = data;
-        populateTotal();
-        populateTable();
-        populateChart();
+        populate();
       } else {
+        //if offline, also get transactions from indexedDB that haven't been cached
         getIndxdbTransactions().then(results => {
           results.reverse();
           transactions = [...results, ...data];
-          console.log(transactions);
-          populateTotal();
-          populateTable();
-          populateChart();
+          populate();
         })
       }
     });
 };
+
+function populate() {
+  populateTotal();
+  populateTable();
+  populateChart();
+}
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
@@ -154,24 +140,19 @@ function sendTransaction(isAdding) {
       errorEl.textContent = "Missing Information";
     }
     else {
+      // render
+      renderTransactions();
       // clear form
       nameEl.value = "";
       amountEl.value = "";
-      renderTransactions();
+      
     }
   })
   .catch(err => {
     // fetch failed, save to indexedDB
     saveRecord(transaction);
-    // // add to beginning of current array of data
-    // transactions.unshift(transaction);
-    // // re-run logic to populate ui with new record
-    // populateChart();
-    // populateTable();
-    // populateTotal();
-
+    // render
     renderTransactions();
-
     // clear form
     nameEl.value = "";
     amountEl.value = "";

@@ -1,10 +1,6 @@
-// import { transactions } from "./index";
-
 let db;
 // create a new db request for a "budget" database.
 const request = indexedDB.open("budget", 1);
-
-// export let pendingTransactions = [];
 
 request.onupgradeneeded = event => {
    // create object store called "pending" and set autoIncrement to true
@@ -25,25 +21,21 @@ request.onerror = event => {
   console.log("Woops! " + event.target.errorCode);
 };
 
-export function saveRecord(record) {
-  
+function accessStore() {
   // create a transaction on the pending db with readwrite access
   const transaction = db.transaction(["pending"], "readwrite");
-
   // access your pending object store
-  const store = transaction.objectStore("pending");
+  return store = transaction.objectStore("pending");
+}
 
-  // transactions.push(JSON.stringify(record));
-  // console.log(`db.js: ${pendingTransactions}`);
+export function saveRecord(record) {
+  accessStore();
   // add record to your store with add method.
   store.add(record);
 }
 
 function checkDatabase() {
-  // open a transaction on your pending db
-  const transaction = db.transaction(["pending"], "readwrite");
-  // access your pending object store
-  const store = transaction.objectStore("pending");
+  accessStore();
   // get all records from store and set to a variable
   const getAll = store.getAll();
 
@@ -59,11 +51,7 @@ function checkDatabase() {
       })
       .then(response => response.json())
       .then(() => {
-        // if successful, open a transaction on your pending db
-        const transaction = db.transaction(["pending"], "readwrite");
-
-        // access your pending object store
-        const store = transaction.objectStore("pending");
+        accessStore();
 
         // clear all items in your store
         store.clear();
@@ -74,10 +62,7 @@ function checkDatabase() {
 
 export function getIndxdbTransactions() {
     return new Promise((resolve, reject) => {
-    // open a transaction on your pending db
-    const transaction = db.transaction(["pending"], "readwrite");
-    // access your pending object store
-    const store = transaction.objectStore("pending");
+    accessStore();
     // get all records from store and set to a variable
     const getAll = store.getAll();
 
@@ -89,6 +74,3 @@ export function getIndxdbTransactions() {
 
 // listen for app coming back online
 window.addEventListener("online", checkDatabase);
-
-// populate offline transactions
-// window.addEventListener("offline", populateTransactions);
