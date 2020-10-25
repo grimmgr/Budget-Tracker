@@ -1,4 +1,4 @@
-import { saveRecord, getIndxdbTransactions } from "./db";
+import { db, saveRecord, getIndxdbTransactions } from "./db";
 
 let transactions = [];
 
