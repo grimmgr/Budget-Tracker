@@ -8,7 +8,8 @@ const config = {
   },
   output: {
     path: __dirname + "/public/dist",
-    filename: "[name].bundle.js"
+    publickPath: "/",
+    filename: "bundle.js"
   },
   plugins: [
     new WebpackPwaManifest({
