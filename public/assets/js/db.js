@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 let db;
 let store;
-=======
-export let db;
->>>>>>> 87b976afc087233024a2db62a83946f554a09a64
 // create a new db request for a "budget" database.
 const request = indexedDB.open("budget", 1);
 
@@ -31,13 +27,10 @@ export function saveRecord(record) {
   const transaction = db.transaction(["pending"], "readwrite");
   // access your pending object store
   store = transaction.objectStore("pending");
-<<<<<<< HEAD
 }
 
 export function saveRecord(record) {
   accessStore();
-=======
->>>>>>> 87b976afc087233024a2db62a83946f554a09a64
   // add record to your store with add method.
   store.add(record);
 }
