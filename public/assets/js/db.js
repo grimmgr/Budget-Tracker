@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 let db;
 let store;
+=======
+export let db;
+>>>>>>> 87b976afc087233024a2db62a83946f554a09a64
 // create a new db request for a "budget" database.
 const request = indexedDB.open("budget", 1);
 
@@ -22,21 +26,27 @@ request.onerror = event => {
   console.log("Woops! " + event.target.errorCode);
 };
 
-function accessStore() {
+export function saveRecord(record) {
   // create a transaction on the pending db with readwrite access
   const transaction = db.transaction(["pending"], "readwrite");
   // access your pending object store
   store = transaction.objectStore("pending");
+<<<<<<< HEAD
 }
 
 export function saveRecord(record) {
   accessStore();
+=======
+>>>>>>> 87b976afc087233024a2db62a83946f554a09a64
   // add record to your store with add method.
   store.add(record);
 }
 
 function checkDatabase() {
-  accessStore();
+  // create a transaction on the pending db with readwrite access
+  const transaction = db.transaction(["pending"], "readwrite");
+  // access your pending object store
+  store = transaction.objectStore("pending");
   // get all records from store and set to a variable
   const getAll = store.getAll();
 
@@ -52,8 +62,10 @@ function checkDatabase() {
       })
       .then(response => response.json())
       .then(() => {
-        accessStore();
-
+        // create a transaction on the pending db with readwrite access
+        const transaction = db.transaction(["pending"], "readwrite");
+        // access your pending object store
+        store = transaction.objectStore("pending");
         // clear all items in your store
         store.clear();
       });
@@ -63,7 +75,10 @@ function checkDatabase() {
 
 export function getIndxdbTransactions() {
     return new Promise((resolve, reject) => {
-    accessStore();
+    // create a transaction on the pending db with readwrite access
+    const transaction = db.transaction(["pending"], "readwrite");
+    // access your pending object store
+    store = transaction.objectStore("pending");
     // get all records from store and set to a variable
     const getAll = store.getAll();
 
