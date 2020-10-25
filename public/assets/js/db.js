@@ -1,4 +1,5 @@
 let db;
+let store;
 // create a new db request for a "budget" database.
 const request = indexedDB.open("budget", 1);
 
@@ -25,7 +26,7 @@ function accessStore() {
   // create a transaction on the pending db with readwrite access
   const transaction = db.transaction(["pending"], "readwrite");
   // access your pending object store
-  return store = transaction.objectStore("pending");
+  store = transaction.objectStore("pending");
 }
 
 export function saveRecord(record) {
