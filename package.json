@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lite-server": "lite-server",
     "webpack": "webpack",
-    "prestart": "npm run webpack",
     "start": "node server.js",
     "heroku-postbuild": "webpack -p"
   },
