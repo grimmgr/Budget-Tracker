@@ -3,4 +3,4 @@ An app that lets users track their income and expenses. It functions offline so 
 
 <https://trak-ur-m0n3y.herokuapp.com/>
 
-![](/public/assets/screenshot.png)
+<img src='public/assets/Screenshot.png' width='60%'>
