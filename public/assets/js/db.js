@@ -21,21 +21,20 @@ request.onerror = event => {
   console.log("Woops! " + event.target.errorCode);
 };
 
-function accessStore() {
+export function saveRecord(record) {
   // create a transaction on the pending db with readwrite access
   const transaction = db.transaction(["pending"], "readwrite");
   // access your pending object store
-  return store = transaction.objectStore("pending");
-}
-
-export function saveRecord(record) {
-  accessStore();
+  store = transaction.objectStore("pending");
   // add record to your store with add method.
   store.add(record);
 }
 
 function checkDatabase() {
-  accessStore();
+  // create a transaction on the pending db with readwrite access
+  const transaction = db.transaction(["pending"], "readwrite");
+  // access your pending object store
+  store = transaction.objectStore("pending");
   // get all records from store and set to a variable
   const getAll = store.getAll();
 
@@ -51,8 +50,10 @@ function checkDatabase() {
       })
       .then(response => response.json())
       .then(() => {
-        accessStore();
-
+        // create a transaction on the pending db with readwrite access
+        const transaction = db.transaction(["pending"], "readwrite");
+        // access your pending object store
+        store = transaction.objectStore("pending");
         // clear all items in your store
         store.clear();
       });
@@ -62,7 +63,10 @@ function checkDatabase() {
 
 export function getIndxdbTransactions() {
     return new Promise((resolve, reject) => {
-    accessStore();
+    // create a transaction on the pending db with readwrite access
+    const transaction = db.transaction(["pending"], "readwrite");
+    // access your pending object store
+    store = transaction.objectStore("pending");
     // get all records from store and set to a variable
     const getAll = store.getAll();
 
