@@ -8,7 +8,7 @@ const config = {
   },
   output: {
     path: __dirname + "/public/dist",
-    publickPath: "/",
+    publicPath: "/",
     filename: "bundle.js"
   },
   plugins: [
