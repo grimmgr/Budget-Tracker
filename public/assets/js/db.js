@@ -27,10 +27,6 @@ export function saveRecord(record) {
   const transaction = db.transaction(["pending"], "readwrite");
   // access your pending object store
   store = transaction.objectStore("pending");
-}
-
-export function saveRecord(record) {
-  accessStore();
   // add record to your store with add method.
   store.add(record);
 }
